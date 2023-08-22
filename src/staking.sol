@@ -1,16 +1,15 @@
 pragma solidity ^0.8.19;
 
-import "./ERC20.sol";
+import "./Token.sol";
 
-contract Stacking{
+contract Staking{
 
     // instance du contrat ERC20
-    ERC20 token = new ERC20();
-    token._mint(address(0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5), 20000);
+    Token token = new Token();
 
     // error messages
-    error stakDoNotFinshed;
-    error stakIsFinished;
+    error stakDoNotFinshed();
+    error stakIsFinished();
 
     // Variables
     uint256 times;
@@ -28,7 +27,7 @@ contract Stacking{
     mapping (address => stakData) balance;
 
     constructor(uint256 _times, uint256 _rateReward){
-        owner = msg.sender();
+        owner = msg.sender;
         times = _times;
         rateReward = _rateReward;
     }
@@ -44,13 +43,18 @@ contract Stacking{
         return rateReward;
     }
 
+    function getTotalStaking(address _account) external view returns(uint256) {
+        return balance[_account].totalStaking;
+    }
+
     // go staking a amount 
     function goStaking(address _account, uint256 _amount) external{
         require(_account != address(0) || _account != owner);
         require(_amount > 0);
-        require(erc20.balanceOf[_account] >= _amount);
-        balance[_account].reward = _stak(_account, _amount);
-        erc20.transfer(_account, _amount);
+        require(token.balanceOf(_account) >= _amount);
+        balance[_account].totalStaking = _amount;
+        balance[_account].reward = _stak(_account);
+        token.transfer(_account, _amount);
     }
     
     // stop staking
@@ -58,18 +62,18 @@ contract Stacking{
         require(_account != address(0) || _account != owner);
         require(balance[_account].totalStaking > 0);
 
-        if (balance[_account].duration > 0)){
-            uint256 staker = balance[_account];
+        if (balance[_account].duration > 0){
+            stakData storage staker = balance[_account];
             uint256 totalReward = staker.totalStaking + staker.reward;
             delete balance[_account];
             token.transfer(_account, totalReward);
         }else{
-            revert stakIsFinished;
+            revert stakIsFinished();
         }
     }
 
     //check the state of staking
-    function checkStaking(address _account) external returns(uint256){
+    function checkStaking(address _account) external view returns(uint256){
         require(_account != address(0) || _account != owner);
         require(balance[_account].totalStaking > 0);
         return balance[_account].reward;
@@ -79,22 +83,22 @@ contract Stacking{
     function endingStak(address _account) external {
         require(_account != address(0) || _account != owner);
         require(balance[_account].totalStaking > 0);
-        uint256 staker = balance[_account];
+        stakData storage staker = balance[_account];
         
         if (staker.duration == 0){
             uint256 totalReward = staker.totalStaking + staker.reward;
             delete balance[_account];
             token.transfer(_account, totalReward);    
         } else {
-            revert stakDoNotFinshed;
+            revert stakDoNotFinshed();
         }
     }
 
 
     // function for compute stak
-    function _stak(address _account, uint256 _amount) internal returns(uint256){
-        uint256 staker = balance[_account];
+    function _stak(address _account) internal returns(uint256){
+        stakData storage staker = balance[_account];
         staker.duration = times - block.timestamp;
-        return (_amount*rateReward*staker.duration)/100;
+        return (staker.totalStaking*rateReward*staker.duration)/100;
     }
 }
