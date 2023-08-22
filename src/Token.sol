@@ -1,7 +1,13 @@
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.19;
 
 import "openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
+import "../src/Accounts.sol";
 
-contract Token is ERC20{
-    constructor() ERC20("MATEC", "MAT"){_mint(address(0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5), 20000);}
+contract Token is ERC20, Accounts{
+    constructor() ERC20("MATEC", "MAT"){
+        //mint 2000000 tokens 
+        _mint(account1, 2000000);
+
+        transferFrom(account1, account2, 20000);
+    }
 }

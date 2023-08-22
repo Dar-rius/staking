@@ -8,8 +8,9 @@ contract Staking{
     Token token = new Token();
 
     // error messages
-    error stakDoNotFinshed();
-    error stakIsFinished();
+    error StakDoNotFinshed();
+    error StakIsFinished();
+    error AccountDoNotExist();
 
     // Variables
     uint256 times;
@@ -44,7 +45,12 @@ contract Staking{
     }
 
     function getTotalStaking(address _account) external view returns(uint256) {
-        return balance[_account].totalStaking;
+        require(_account != address(0) || _account == owner);
+        if (balance[_account].reward > 0){
+            return balance[_account].totalStaking;
+        } else {
+            revert AccountDoNotExist();
+        }
     }
 
     // go staking a amount 
@@ -63,11 +69,11 @@ contract Staking{
 
         if (balance[_account].duration > 0){
             stakData storage staker = balance[_account];
-            uint256 totalReward = staker.totalStaking + staker.reward;
+            uint256 reward = staker.reward;
             delete balance[_account];
-            token.transfer(_account, totalReward);
+            token.transfer(_account, reward);
         }else{
-            revert stakIsFinished();
+            revert StakIsFinished();
         }
     }
 
@@ -85,11 +91,11 @@ contract Staking{
         stakData storage staker = balance[_account];
         
         if (staker.duration == 0){
-            uint256 totalReward = staker.totalStaking + staker.reward;
+            uint256 reward = balance[_account].reward;
             delete balance[_account];
-            token.transfer(_account, totalReward);    
+            token.transfer(_account, reward);    
         } else {
-            revert stakDoNotFinshed();
+            revert StakDoNotFinshed();
         }
     }
 
