@@ -54,7 +54,6 @@ contract Staking{
         require(token.balanceOf(_account) >= _amount);
         balance[_account].totalStaking = _amount;
         balance[_account].reward = _stak(_account);
-        token.transfer(_account, _amount);
     }
     
     // stop staking
