@@ -8,7 +8,8 @@ contract TokenTest is Test, Accounts{
     Token token;
 
     function setUp() external {
-        token = new Token(account2, 2000);
+        token = new Token();
+        token.transfer(account2, 2000);
     }
 
     // fonction de test pour minter des tokens vers la balance du owner

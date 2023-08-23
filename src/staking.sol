@@ -11,7 +11,6 @@ contract Staking is Accounts{
     // error messages
     error StakDoNotFinshed();
     error StakIsFinished();
-    error AccountDoNotExist();
 
     // Variables
     uint256 times;
@@ -28,7 +27,8 @@ contract Staking is Accounts{
     //Balance for staker
     mapping (address => stakData) balance;
 
-    constructor(uint256 _times, uint256 _rateReward){
+    constructor(Token _token, uint256 _times, uint256 _rateReward){
+        token = _token;
         owner = msg.sender;
         times = _times;
         rateReward = _rateReward;
@@ -46,12 +46,13 @@ contract Staking is Accounts{
     }
 
     function getTotalStaking(address _account) external view returns(uint256) {
-        require(_account != address(0) || _account == owner);
-        if (balance[_account].reward > 0){
-            return balance[_account].totalStaking;
-        } else {
-            revert AccountDoNotExist();
-        }
+        require(_account != address(0) || _account != owner);
+        require(balance[_account].reward > 0, "Stak don't exist");
+        return balance[_account].totalStaking;
+    }
+
+    function check(address _account) external view returns(uint256){
+        return token.balanceOf(_account);
     }
 
     // go staking a amount 

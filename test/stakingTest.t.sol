@@ -12,8 +12,9 @@ contract StakingTest is Test, Accounts{
         event Transfer(address indexed _from, address indexed _to, uint256 _amount);
 
     function setUp() external {
-        token = new Token(account2, 2000);
-        stak = new Staking(10, 3);
+        token = new Token();
+        token.transfer(account2, 2000);
+        stak = new Staking(token, 10, 3);
     }
 
     //test sur le bon fonctionnement des features 
@@ -30,11 +31,12 @@ contract StakingTest is Test, Accounts{
 
     //test sur la fonctionnalite d'arret duu staking
     function test_unStaking() external{
+        vm.prank(account2);
         stak.goStaking(account2, 200);
         stak.unStaking(account2);
         vm.expectEmit(true, true, false, true);
         emit Transfer(account1, account2, 54);
-        assertEq(token.balanceOf(account2), 20054);
+        assertEq(token.balanceOf(account2), 2054);
     }
     //test sur les potentiels problemes
 }
