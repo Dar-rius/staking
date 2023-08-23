@@ -8,14 +8,12 @@ contract TokenTest is Test, Accounts{
     Token token;
 
     function setUp() external {
-        token = new Token();
+        token = new Token(account2, 2000);
     }
 
+    // fonction de test pour minter des tokens vers la balance du owner
     function test_mint() external{
-        assertEq(token.balanceOf(account1), 2000000);
-    }
-
-    function test_balanceAccount() external{
-        assertEq(token.balanceOf(account2), 20000);
+        assertEq(token.balanceOf(account1), 1998000);
+        assertEq(token.balanceOf(account2), 2000);
     }
 }

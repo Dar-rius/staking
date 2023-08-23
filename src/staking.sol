@@ -1,11 +1,12 @@
 pragma solidity ^0.8.19;
 
 import "./Token.sol";
+import "./Accounts.sol";
 
-contract Staking{
+contract Staking is Accounts{
 
     // instance du contrat ERC20
-    Token token = new Token();
+    Token token;
 
     // error messages
     error StakDoNotFinshed();
