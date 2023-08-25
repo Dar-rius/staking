@@ -22,6 +22,7 @@ contract Staking is Accounts{
         uint256 totalStaking;
         uint256 reward;
         uint256 duration;
+        bool accountStak;
     }
 
     //Balance for staker
@@ -45,57 +46,60 @@ contract Staking is Accounts{
         return rateReward;
     }
 
-    function getTotalStaking(address _account) external view returns(uint256) {
-        require(_account != address(0) || _account != owner);
-        require(balance[_account].reward > 0, "Stak don't exist");
-        return balance[_account].totalStaking;
-    }
-
-    function check(address _account) external view returns(uint256){
-        return token.balanceOf(_account);
+    function getTotalStaking() external view returns(uint256) {
+        address sender = msg.sender;
+        require(sender != owner);
+        require(balance[sender].accountStak, "Account do note exist");
+        return balance[sender].totalStaking;
     }
 
     // go staking a amount 
-    function goStaking(address _account, uint256 _amount) external{
-        require(_account != address(0) || _account != owner);
+    function goStaking(uint256 _amount) external{
+        address sender = msg.sender;
+        require(sender != owner);
         require(_amount > 0);
-        require(token.balanceOf(_account) >= _amount);
-        balance[_account].totalStaking = _amount;
-        balance[_account].reward = _stak(_account);
+        require(token.balanceOf(sender) >= _amount);
+        balance[sender].totalStaking = _amount;
+        balance[sender].reward = _stak(sender);
+        balance[sender].accountStak = true;
     }
     
     // stop staking
-    function unStaking(address _account) external {
-        require(_account != address(0) || _account != owner);
-        require(balance[_account].totalStaking > 0);
+    function unStaking() external {
+        address sender = msg.sender;
+        require(sender != owner, "Is owner");
+        require(balance[sender].accountStak, "Account do note exist");
 
-        if (balance[_account].duration > 0){
-            stakData storage staker = balance[_account];
+        if (balance[sender].duration > 0){
+            stakData storage staker = balance[sender];
             uint256 reward = staker.reward;
-            delete balance[_account];
-            token.transfer(_account, reward);
+            bool accountStak = staker.accountStak;
+            delete balance[sender];
+            token.transferStaking(sender, accountStak, reward);
         }else{
             revert StakIsFinished();
         }
     }
 
     //check the state of staking
-    function checkStaking(address _account) external view returns(uint256){
-        require(_account != address(0) || _account != owner);
-        require(balance[_account].totalStaking > 0);
-        return balance[_account].reward;
+    function checkStaking() external view returns(uint256){
+        address sender = msg.sender;
+        require(sender != owner);
+        require(balance[sender].accountStak, "Account do note exist");
+        return balance[sender].reward;
     }
 
     //Ending stak
-    function endingStak(address _account) external {
-        require(_account != address(0) || _account != owner);
-        require(balance[_account].totalStaking > 0);
-        stakData storage staker = balance[_account];
+    function endingStak() external {
+        address sender = msg.sender;
+        require(sender != owner);
+        require(balance[sender].accountStak, "Account do note exist");
+        stakData storage staker = balance[sender];
         
         if (staker.duration == 0){
-            uint256 reward = balance[_account].reward;
-            delete balance[_account];
-            token.transfer(_account, reward);    
+            uint256 reward = balance[sender].reward;
+            delete balance[sender];
+            token.transfer(sender, reward);    
         } else {
             revert StakDoNotFinshed();
         }

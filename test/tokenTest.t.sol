@@ -6,6 +6,7 @@ import "../src/Accounts.sol";
 
 contract TokenTest is Test, Accounts{
     Token token;
+    event Transfer(address indexed _from, address indexed _to, uint256 _amount);
 
     function setUp() external {
         token = new Token();
@@ -13,8 +14,23 @@ contract TokenTest is Test, Accounts{
     }
 
     // fonction de test pour minter des tokens vers la balance du owner
-    function test_mint() external{
+    function test_balance() external{
         assertEq(token.balanceOf(account1), 1998000);
         assertEq(token.balanceOf(account2), 2000);
+    }
+
+    function test_transferStaking() external{
+        vm.expectEmit(true, true, false, true);
+        emit Transfer(address(0), account2, 200);
+        token.transferStaking(account2, true, 200);
+        assertEq(token.balanceOf(account2), 2200);
+    }
+
+    //test fails
+    function testMultipleExpectReverts_transferStaking() external{
+        vm.expectRevert("This address don't account for staking");
+        token.transferStaking(account2, false, 200);
+        vm.expectRevert("Error in address");
+        token.transferStaking(address(0), false, 200);
     }
 }

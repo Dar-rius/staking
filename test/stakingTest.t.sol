@@ -20,9 +20,12 @@ contract StakingTest is Test, Accounts{
     //test sur le bon fonctionnement des features 
     //tetst sur la fonction de staking
     function test_onStaking() external returns(bool){
-        stak.goStaking(account2, 200);
-        assertEq(stak.getTotalStaking(account2), 200);
-        if (stak.checkStaking(account2) > 10){
+        vm.prank(account2);
+        stak.goStaking(200);
+        vm.prank(account2);
+        assertEq(stak.getTotalStaking(), 200);
+        vm.prank(account2);
+        if (stak.checkStaking() > 10){
             return true;
         } else {
             return false;
@@ -32,11 +35,13 @@ contract StakingTest is Test, Accounts{
     //test sur la fonctionnalite d'arret duu staking
     function test_unStaking() external{
         vm.prank(account2);
-        stak.goStaking(account2, 200);
-        stak.unStaking(account2);
+        stak.goStaking(200);
+        vm.prank(account2);
         vm.expectEmit(true, true, false, true);
-        emit Transfer(account1, account2, 54);
+        emit Transfer(address(0), account2, 54);
+        stak.unStaking();
         assertEq(token.balanceOf(account2), 2054);
     }
+
     //test sur les potentiels problemes
 }
