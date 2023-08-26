@@ -77,6 +77,7 @@ contract StakingTest is Test, Accounts{
         stak.endingStak();
     } 
 
+
     function testExpectRevertNoReason_onStaking() external {
         //revert msg.sender == owner
         vm.expectRevert(bytes(""));
@@ -91,5 +92,28 @@ contract StakingTest is Test, Accounts{
         vm.prank(address(2));
         vm.expectRevert(bytes(""));
         stak.goStaking(0);
+    }
+
+
+    function testMultipleExpectReverts_unStaking() external {
+        vm.prank(account2);
+        stak.goStaking(200);
+
+        //revert account don't exist
+        vm.prank(address(3));
+        vm.expectRevert("Account do not exist");
+        stak.unStaking();
+
+        // if Time is over
+        Token tk1 = new Token();
+        tk1.transfer(account2, 2000);
+        Staking st1 = new Staking(tk1, 1, 3);
+
+        vm.prank(account2);
+        st1.goStaking(200);
+
+        vm.prank(account2);
+        vm.expectRevert("Time is Over");
+        st1.unStaking();
     }
 }
