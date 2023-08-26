@@ -8,10 +8,6 @@ contract Staking is Accounts{
     // instance du contrat ERC20
     Token private token;
 
-    // error messages
-    error StakDoNotFinshed();
-    error StakIsFinished();
-
     // Variables
     uint256 private times;
     uint256 private rateReward;
@@ -70,7 +66,7 @@ contract Staking is Accounts{
         address sender = msg.sender;
         _checkTime(sender);
         require(sender != owner, "Is owner");
-        require(balance[sender].accountStak, "Account do note exist");
+        require(balance[sender].accountStak, "Account do not exist");
         require(paused, "Time is Over");
         stakData storage staker = balance[sender];
         uint256 reward = staker.reward;
@@ -83,7 +79,7 @@ contract Staking is Accounts{
     function checkStaking() external view returns(uint256){
         address sender = msg.sender;
         require(sender != owner);
-        require(balance[sender].accountStak, "Account do note exist");
+        require(balance[sender].accountStak, "Account do not exist");
         return balance[sender].reward;
     }
 
@@ -92,12 +88,12 @@ contract Staking is Accounts{
         address sender = msg.sender;
         _checkTime(sender);
         require(sender != owner);
-        require(balance[sender].accountStak, "Account do note exist");
+        require(balance[sender].accountStak, "Account do not exist");
         require(!paused, "Time is not Over");
         stakData storage staker = balance[sender];
         uint256 reward = balance[sender].reward;
-        delete balance[sender];
         bool accountStak = staker.accountStak;
+        delete balance[sender];
         token.transferStaking(sender, accountStak, reward);
         }
 
