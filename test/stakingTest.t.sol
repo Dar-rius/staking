@@ -9,6 +9,7 @@ contract StakingTest is Test, Accounts{
     Staking stak;
     Token token;
     error  AccountDoNotExist();
+    error StakDoNotFinshed();
         event Transfer(address indexed _from, address indexed _to, uint256 _amount);
 
     function setUp() external {
@@ -43,5 +44,21 @@ contract StakingTest is Test, Accounts{
         assertEq(token.balanceOf(account2), 2054);
     }
 
-    //test sur les potentiels problemes
+    //test sur checking du reward
+    function test_checkStaking() external{
+        vm.prank(account2);
+        stak.goStaking(200);
+        vm.prank(account2);
+        assertEq(stak.checkStaking(), 54);
+    }
+
+    //Echec sur les tests
+    //test sur la fin totale d'une processus de staking
+    function testMultipleExpectReverts_endStak() external{
+        vm.prank(account2);
+        stak.goStaking(200);
+        vm.expectRevert("Time is not Over");
+        vm.prank(account2);
+        stak.endingStak();
+    }
 }
