@@ -115,4 +115,13 @@ contract StakingTest is Test, Accounts{
         vm.expectRevert("Time is Over");
         st1.unStaking();
     }
+
+    function testFuzz_onStaking(uint64 _amount) external {
+        vm.assume(_amount > 0);
+        vm.assume(_amount < 2000);
+        vm.prank(account2);
+        stak.goStaking(_amount);
+        vm.prank(account2);
+        assertEq(stak.getTotalStaking(), _amount);
+    }
 }

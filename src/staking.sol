@@ -18,7 +18,7 @@ contract Staking is Accounts{
     // Structure for balance's staker
     struct stakData{
         uint256 reward;
-        uint256 totalStaking;
+        uint64 totalStaking;
         uint duration;
         bool accountStak;
     }
@@ -44,7 +44,7 @@ contract Staking is Accounts{
         return rateReward;
     }
 
-    function getTotalStaking() external view returns(uint256) {
+    function getTotalStaking() external view returns(uint64) {
         address sender = msg.sender;
         require(sender != owner);
         require(balance[sender].accountStak, "Account do not exist");
@@ -52,7 +52,7 @@ contract Staking is Accounts{
     }
 
     // go staking a amount 
-    function goStaking(uint256 _amount) external{
+    function goStaking(uint64 _amount) external{
         address sender = msg.sender;
         require(sender != owner);
         require(_amount > 0, "problem in value");
