@@ -1,23 +1,24 @@
 pragma solidity ^0.8.19;
+pragma abicoder v2;
 
-import "./Token.sol";
-import "./Accounts.sol";
+import {Token} from "./Token.sol";
+import {Accounts} from "./Accounts.sol";
 
 contract Staking is Accounts{
-
+    
     // instance du contrat ERC20
     Token private token;
 
     // Variables
-    uint256 private times;
-    uint256 private rateReward;
+    uint8 private times;
+    uint8 private rateReward;
     address private owner;
     bool private paused;
 
     // Structure for balance's staker
     struct stakData{
-        uint256 totalStaking;
         uint256 reward;
+        uint256 totalStaking;
         uint duration;
         bool accountStak;
     }
@@ -25,7 +26,7 @@ contract Staking is Accounts{
     //Balance for staker
     mapping (address => stakData) private balance;
 
-    constructor(Token _token, uint256 _times, uint256 _rateReward){
+    constructor(Token _token, uint8 _times, uint8 _rateReward){
         token = _token;
         owner = msg.sender;
         times = _times;
@@ -34,12 +35,12 @@ contract Staking is Accounts{
 
     // group features for staking
     //get times for staking 
-    function getTimes() external view returns(uint256){
+    function getTimes() external view returns(uint8){
         return times;
     }
 
     // get rate reward for staking
-    function getRateReward() external view returns(uint256){
+    function getRateReward() external view returns(uint8){
         return rateReward;
     }
 
@@ -56,9 +57,10 @@ contract Staking is Accounts{
         require(sender != owner);
         require(_amount > 0);
         require(token.balanceOf(sender) >= _amount);
-        balance[sender].totalStaking = _amount;
-        balance[sender].reward += _stak(sender);
-        balance[sender].accountStak = true;
+        stakData storage staker = balance[sender];
+        staker.totalStaking = _amount;
+        staker.reward += _stak(staker);
+        staker.accountStak = true;
     }
     
     // stop staking
@@ -99,19 +101,15 @@ contract Staking is Accounts{
 
 
     // function for compute stak
-    function _stak(address _account) internal returns(uint256){
-        stakData storage staker = balance[_account];
-        staker.duration = times-block.timestamp;
-        return (staker.totalStaking*rateReward*staker.duration)/100;
+    function _stak(stakData storage _staker) internal returns(uint256){
+        _staker.duration = times-block.timestamp;
+        return (_staker.totalStaking*rateReward*_staker.duration)/100;
     }
 
     // Function to check time 
     function _checkTime(address _account)  internal {
         if (balance[_account].duration > 0){
             paused = true;
-        }
-        else {
-            paused = false;
         }
     }
 }
