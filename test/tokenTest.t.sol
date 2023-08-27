@@ -33,4 +33,13 @@ contract TokenTest is Test, Accounts{
         vm.expectRevert("Error in address");
         token.transferStaking(address(0), false, 200);
     }
+
+    // Fuzzing test
+    function testFuzz_transferStaking(address _to, bool _accountStak, uint64 _amount) external {
+        vm.assume(_to != address(0));
+        vm.assume(_accountStak);
+        vm.assume(_amount >0);
+        token.transferStaking(_to, true, _amount);
+        assertEq(token.balanceOf(_to), _amount);
+    }
 }

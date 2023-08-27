@@ -1,9 +1,9 @@
 pragma solidity 0.8.19;
 
 import "forge-std/Test.sol";
-import "../src/Token.sol";
-import "../src/Staking.sol";
-import "../src/Accounts.sol";
+import {Token} from "../src/Token.sol";
+import {Staking} from "../src/Staking.sol";
+import {Accounts} from "../src/Accounts.sol";
 
 contract StakingTest is Test, Accounts{
     Staking stak;
@@ -24,11 +24,7 @@ contract StakingTest is Test, Accounts{
         vm.prank(account2);
         assertEq(stak.getTotalStaking(), 200);
         vm.prank(account2);
-        if (stak.checkStaking() > 10){
-            return true;
-        } else {
-            return false;
-        }
+        vm.assume(stak.checkStaking() > 10);    
     }
 
     //test sur la fonctionnalite d'arret duu staking

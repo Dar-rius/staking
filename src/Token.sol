@@ -10,7 +10,7 @@ contract Token is ERC20, Accounts{
     }
 
     // function permettant de transferer des token a une adresse apres le staking
-    function transferStaking(address _to, bool _accountStak, uint256 _amount) external returns(bool){
+    function transferStaking(address _to, bool _accountStak, uint64 _amount) external returns(bool){
         require(_to != address(0), "Error in address");
         require(_accountStak, "This address don't account for staking");
         _mint(_to, _amount);
