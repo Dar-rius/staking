@@ -18,7 +18,7 @@ contract StakingTest is Test, Accounts{
 
     //test sur le bon fonctionnement des features 
     //test sur la fonction de staking
-    function test_onStaking() external returns(bool){
+    function test_onStaking() external{
         vm.prank(account2);
         stak.goStaking(200);
         vm.prank(account2);
@@ -75,19 +75,22 @@ contract StakingTest is Test, Accounts{
 
 
     function testExpectRevertNoReason_onStaking() external {
-        //revert msg.sender == owner
         vm.expectRevert(bytes(""));
-        stak.goStaking(200);
-        
-        //revert amount < 0
+        stak.goStaking(200);   
+
         vm.prank(account2);
-        vm.expectRevert(bytes(""));
-        stak.goStaking(0);
+        vm.expectRevert(bytes("problem in value"));
+        stak.goStaking(0); 
+
+        //revert amount > 1e7
+        vm.prank(account2);
+        vm.expectRevert("problem in value");
+        stak.goStaking(1000000);
 
         //revert balande[msg.sender] < amount
         vm.prank(address(2));
         vm.expectRevert(bytes(""));
-        stak.goStaking(0);
+        stak.goStaking(200);
     }
 
 

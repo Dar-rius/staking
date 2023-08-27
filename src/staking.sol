@@ -55,7 +55,8 @@ contract Staking is Accounts{
     function goStaking(uint256 _amount) external{
         address sender = msg.sender;
         require(sender != owner);
-        require(_amount > 0);
+        require(_amount > 0, "problem in value");
+        require(_amount < 1000000, "problem in value");
         require(token.balanceOf(sender) >= _amount);
         stakData storage staker = balance[sender];
         staker.totalStaking = _amount;
@@ -110,6 +111,9 @@ contract Staking is Accounts{
     function _checkTime(address _account)  internal {
         if (balance[_account].duration > 0){
             paused = true;
+        }
+        else {
+            paused = false;
         }
     }
 }
