@@ -1,8 +1,8 @@
 pragma solidity 0.8.19;
 
 import "forge-std/Test.sol";
-import {Token} "../src/Token.sol";
-import {Accounts} "../src/Accounts.sol";
+import {Token} from "../src/Token.sol";
+import {Accounts} from "../src/Accounts.sol";
 
 contract TokenTest is Test, Accounts{
     Token token;
