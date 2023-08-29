@@ -2,9 +2,8 @@ pragma solidity ^0.8.19;
 pragma abicoder v2;
 
 import {Token} from "./Token.sol";
-import {Accounts} from "./Accounts.sol";
 
-contract Staking is Accounts{
+contract Staking {
     
     // instance du contrat ERC20
     Token private token;
