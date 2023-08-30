@@ -8,7 +8,7 @@ import {Accounts} from "../src/Accounts.sol";
 contract StakingTest is Test, Accounts{
     Staking stak;
     Token token;
-        event Transfer(address indexed _from, address indexed _to, uint256 _amount);
+    event Transfer(address indexed _from, address indexed _to, uint256 _amount);
 
     function setUp() external {
         token = new Token();
