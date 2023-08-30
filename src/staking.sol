@@ -6,12 +6,12 @@ import {Token} from "./Token.sol";
 contract Staking {
     
     // instance du contrat ERC20
-    Token private token;
+    Token private immutable token;
 
     // Variables
-    uint8 private times;
-    uint8 private rateReward;
-    address private owner;
+    uint8 private immutable times;
+    uint8 private immutable rateReward;
+    address private immutable owner;
     bool private paused;
 
     // Structure for balance's staker
