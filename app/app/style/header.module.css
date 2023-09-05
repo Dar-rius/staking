@@ -1,0 +1,30 @@
+.header {
+  margin-top: 2%;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 5%;
+  margin-right: 5%;
+  align-items: center;
+}
+
+.left input {
+  padding-bottom: 15%;
+  padding-top: 15%;
+  padding-left: 10%;
+  padding-right: 10%;
+  border: none;
+  border-radius: 15px;
+  background: #9f62fe;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.ethereum {
+  display: flex;
+  align-items: center;
+}
+
+.ethereum p {
+  margin-left: 2.5%;
+}
