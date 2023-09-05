@@ -1,0 +1,45 @@
+.princ {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 7%;
+}
+
+.ann {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1%;
+}
+
+.ann p {
+  font-size: 30px;
+  font-weight: bolder;
+  color: #9f62fe;
+}
+
+.ann input {
+  font-weight: bold;
+  background: #9f62fe;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  padding-bottom: 1%;
+  padding-top: 1%;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+}
+
+.bloc {
+  border-radius: 15px;
+  border: 1px solid #545f71;
+  margin-right: 15%;
+  margin-left: 15%;
+  padding: 5%;
+}
+
+.bloc p {
+  color: #9f62fe;
+  font-weight: 500;
+  font-size: 19px;
+}

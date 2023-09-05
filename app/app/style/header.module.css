@@ -8,14 +8,14 @@
 }
 
 .left input {
-  padding-bottom: 15%;
-  padding-top: 15%;
+  padding-bottom: 11%;
+  padding-top: 11%;
   padding-left: 10%;
   padding-right: 10%;
   border: none;
   border-radius: 15px;
   background: #9f62fe;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 500;
   line-height: 22px;
 }
@@ -27,4 +27,5 @@
 
 .ethereum p {
   margin-left: 2.5%;
+  color: #9f62fe;
 }

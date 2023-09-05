@@ -15,12 +15,12 @@ export default function Header() {
   return (
     <header className={style.header}>
       <div className={style.right}>
-        <Image src={logoImg} alt="logo" height={75} />
-        <Image src={github} alt="github" height={75} />
+        <Image src={logoImg} alt="logo" height={60} className={style.logo} />
+        <Image src={github} alt="github" height={60} />
       </div>
       {isConnected && (
         <div className={style.ethereum}>
-          <Image src={eth} alt="ethereum" height={75} />
+          <Image src={eth} alt="ethereum" height={60} />
           <p>{address}</p>
         </div>
       )}
