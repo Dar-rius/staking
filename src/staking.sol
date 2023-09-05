@@ -111,8 +111,5 @@ contract Staking {
         if (balance[_account].duration > 0){
             paused = true;
         }
-        else {
-            paused = false;
-        }
     }
 }

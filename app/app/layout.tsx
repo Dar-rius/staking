@@ -1,6 +1,5 @@
 "use client";
 import "./globals.css";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { createConfig, mainnet, WagmiConfig } from "wagmi";
 import { http, createPublicClient } from "viem";
