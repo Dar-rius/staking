@@ -2,6 +2,8 @@
 import Header from "@/components/header";
 import style from "../style/wallet.module.css";
 import { useAccount } from "wagmi";
+import Contract from "../../../out/Staking.sol/Staking.json";
+import { ethers } from "ethers";
 
 export default function Wallet() {
   const { address, isConnected } = useAccount();

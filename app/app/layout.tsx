@@ -7,6 +7,7 @@ import { http, createPublicClient } from "viem";
 const inter = Inter({ subsets: ["latin"] });
 
 const config = createConfig({
+  autoConnect: true,
   publicClient: createPublicClient({
     chain: mainnet,
     transport: http("127.0.0.1:8545"),
