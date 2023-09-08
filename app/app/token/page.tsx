@@ -1,18 +1,27 @@
-"use client";
-import Header from "../../components/header";
-import { useAccount } from "wagmi";
 import style from "../style/wallet.module.css";
+import { ethers } from "ethers";
+import Contract from "../../../out/Token.sol/Token.json";
+import Header from "../../components/header";
 
-export default function Token() {
-  const { address, isConnected } = useAccount();
+const getBalance = async (address: string) => {
+  const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+  const Token = new ethers.Contract(
+    "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+    Contract.abi,
+    provider,
+  );
+  return await Token.balanceOf(address);
+};
+
+export default async function Token() {
   return (
-    <section>
+    <main>
       <Header />
-      {isConnected && (
+      {  && (
         <section className={style.section}>
           <div className={style.box}>
-            <p className={style.adresse}>{address}</p>
-            <p className={style.montant}> Montant </p>
+            <p className={style.adresse}>{}</p>
+            <p className={style.montant}> {} Mate</p>
             <p className={style.montant1}> Montant a envoyer </p>
             <input type="number" className={style.form} />
             <p className={style.montant1}> Adresse expediteur </p>
@@ -22,7 +31,8 @@ export default function Token() {
           </div>
         </section>
       )}
-      {!isConnected && <p> No connected</p>}
-    </section>
+
+      <p> No connexted </p>
+    </main>
   );
 }

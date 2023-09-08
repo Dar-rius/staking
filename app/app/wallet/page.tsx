@@ -2,11 +2,15 @@
 import Header from "@/components/header";
 import style from "../style/wallet.module.css";
 import { useAccount } from "wagmi";
-import Contract from "../../../out/Staking.sol/Staking.json";
+import Contract from "../../../out/Token.sol/Token.json";
 import { ethers } from "ethers";
+import { useSearchParams } from "next/navigation";
 
 export default function Wallet() {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("adresse");
   const { address, isConnected } = useAccount();
+  console.log("address receive: " + search);
   return (
     <main>
       <Header />
