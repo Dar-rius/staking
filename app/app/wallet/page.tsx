@@ -8,32 +8,27 @@ import { useSearchParams } from "next/navigation";
 
 export default function Wallet() {
   const searchParams = useSearchParams();
-  const search = searchParams.get("adresse");
-  const { address, isConnected } = useAccount();
-  console.log("address receive: " + search);
+  const adresse = searchParams.get("adresse");
   return (
     <main>
       <Header />
-      {isConnected && (
-        <section className={style.section}>
-          <div className={style.box}>
-            <p className={style.adresse}>{address}</p>
-            <p className={style.montant}> Montant </p>
-            <p className={style.montant1}> Montant a staker </p>
-            <input type="number" className={style.form} />
-            <div className={style.infos}>
-              <p>
-                Taux par seconde: <span>%</span>
-              </p>
-              <p>
-                Duree totale: <span>s</span>
-              </p>
-            </div>
-            <input type="submit" value="Staker" className={style.sub} />
+      <section className={style.section}>
+        <div className={style.box}>
+          <p className={style.adresse}>{adresse}</p>
+          <p className={style.montant}> Montant </p>
+          <p className={style.montant1}> Montant a staker </p>
+          <input type="number" className={style.form} />
+          <div className={style.infos}>
+            <p>
+              Taux par seconde: <span>%</span>
+            </p>
+            <p>
+              Duree totale: <span>s</span>
+            </p>
           </div>
-        </section>
-      )}
-      {!isConnected && <p> No connected</p>}
+          <input type="submit" value="Staker" className={style.sub} />
+        </div>
+      </section>
     </main>
   );
 }
